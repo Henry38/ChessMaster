@@ -64,9 +64,9 @@ public final class JChessHistoric extends JPanel {
 		
 		setModel(model);
 		
-        JPanel panelHistorique = new JPanel(new BorderLayout());
-        panelHistorique.add(tableCoup, BorderLayout.CENTER);
-        JScrollPane scrollPane = new JScrollPane(panelHistorique);
+        JPanel panelHistoric = new JPanel(new BorderLayout());
+        panelHistoric.add(tableCoup, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(panelHistoric);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         
         add(toolBar, BorderLayout.NORTH);
@@ -112,11 +112,11 @@ public final class JChessHistoric extends JPanel {
 		
 		if (newModel != null) {
 			newModel.addChessListener(getHandler());
-			HistoricModel hisoricModel = newModel.getHistoricModel();
-			for (int index = 0; index < hisoricModel.getSize(); index++) {
-				listModel.addElement(hisoricModel.getElementAt(index));
+			HistoricModel historicModel = newModel.getHistoricModel();
+			for (int index = 0; index < historicModel.getSize(); index++) {
+				listModel.addElement(historicModel.getElementAt(index));
 			}
-			tableCoup.setSelectedIndex(hisoricModel.getIndex());
+			tableCoup.setSelectedIndex(historicModel.getIndex());
 		}
 		
 		firePropertyChange(MODEL_CHANGED_PROPERTY, oldModel, model);
@@ -178,6 +178,7 @@ public final class JChessHistoric extends JPanel {
 				fireRemovedClicked();
 			} else if (ev.getSource() == split) {
 				fireForkClicked();
+			// TODO : implement forward action
 			} else if (ev.getSource() == forward) { }
 		}
 		
@@ -216,7 +217,6 @@ public final class JChessHistoric extends JPanel {
 	private class CellRenderer extends DefaultListCellRenderer {
 		
 		private static final long serialVersionUID = 1L;
-		//protected Border border = new LineBorder(Color.BLACK);
 		protected Border border = BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK);
 		
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {

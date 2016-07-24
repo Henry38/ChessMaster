@@ -25,6 +25,9 @@ public final class JChess extends JComponent {
 	private Handler handler;
 	private JLabel[][] labels;
 	
+	// TODO : proposer differents modeles de piece
+	// option dans la GUI = changement de folder
+	
 	/** Constructeur */
 	public JChess(ChessModel model) {
 		super();
@@ -62,6 +65,8 @@ public final class JChess extends JComponent {
 	
 	/** Met a jour le modele */
 	public void setModel(ChessModel newModel) {
+		// TODO : les labels consomment trop de ressources
+		// implementer une solution moins gourmande
 		ChessModel oldModel = getModel();
 		
 		if (oldModel != null) {
@@ -89,6 +94,7 @@ public final class JChess extends JComponent {
 		firePropertyChange(MODEL_CHANGED_PROPERTY, oldModel, model);
 	}
 	
+	// TODO : implementer une option reverse dans la GUI
 	/** Renverse le plateau pour l'affichage */
 	public void reverse(boolean b) {
 		JLabel label = null;

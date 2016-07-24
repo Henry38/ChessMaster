@@ -16,6 +16,7 @@ import data.ChessTreeModel;
 import data.ChessTreeModel.Node;
 import data.GameType;
 import data.HistoricModel;
+import data.Plateau;
 
 public class Controler extends Thread implements ChessListener, ChessHistoricListener, TreeSelectionListener {
 	
@@ -41,10 +42,11 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 		this.chessHistoric = chessHistoric;
 		this.soundboard = new SoundBoard();
 		
-		this.model = chess.getModel();
-		this.historicModel = model.getHistoricModel();
+		this.model = null;
+		this.historicModel = null;
 		this.treeModel = chessTree.getTreeModel();
 		this.currentNode = (Node) treeModel.getRoot();
+		
 		this.casePlayed = null;
 		this.cpuPhase = false;
 		this.endGame = true;
@@ -69,17 +71,21 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	/** Demarre une nouvelle partie enregistre au format fen */
 	public synchronized void newGame(String fen, GameType gameType) {
 		// isEventdispatch = true
-		soundboard.playNewgame();
 		if (casePlayed != null) {
 			setSelectionCaseJouable(casePlayed, false);
 			casePlayed = null;
 		}
 		this.gameType = gameType;
+		soundboard.playNewgame();
 		
 		Node root = (Node) treeModel.getRoot();
+		treeModel.clear(root);
+		if (root.getModel() == null) {
+			ChessModel model = new Plateau();
+			treeModel.setModel(root, model);
+		}
 		root.getModel().newGame(fen);
 		placeAtNode(root);
-		treeModel.clear(root);
 		
 		notify();
 	}
@@ -228,7 +234,7 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 				setSelectionCaseJouable(casePlayed, false);
 				casePlayed = null;
 				// On joue le coup sur le plateau si besoin
-				if (coup != null && historicModel.isIndexOnLast()) {
+				if (coup != null) {
 					synchronized (this) {
 						notify();
 					}
@@ -250,16 +256,12 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 				casePlayed = null;
 			}
 			// On retire le dernier coup archive sur le plateau
-			//Coup coup = historicModel.remove();
-			//model.getBack();
 			Coup coup = model.removeCoup();
 			for (Case c : coup.getCases()) {
 				model.setSelection(c, false);
 			}
 			// On retire le dernier coup de l'IA si necessaire
 			if (gameType.isCpuTurn(model) && historicModel.getSize() > 0) {
-				//coup = historicModel.remove();
-				//model.getBack();
 				coup = model.removeCoup();
 				for (Case c : coup.getCases()) {
 					model.setSelection(c, false);
@@ -267,7 +269,7 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 			}
 			endGame = false;
 			cpuPhase = (gameType.isCpuTurn(model));
-			// On notifie le thread si jamais la partie était finie
+			// On notifie le thread si jamais la partie etait finie
 			synchronized (this) {
 				notify();
 			}
@@ -277,7 +279,7 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	@Override
 	public void forkClicked() {
 		// isEventDispatch = true;
-		if (isHumanPhase()) {
+		if (isHumanPhase() || endGame) {
 			ChessModel clone = model.clone();
 			treeModel.add(currentNode, clone);
 		}

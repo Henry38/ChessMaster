@@ -33,7 +33,7 @@ public class MainWindow extends JFrame {
 		this.chessHistorique = new JChessHistoric(model);
 		this.chessTree = new JChessTree(model);
 		this.controler = new Controler(chess, chessHistorique, chessTree);
-		this.controler.newGame(GameType.joueur_contre_ordinateur);
+		//this.controler.newGame(GameType.joueur_contre_ordinateur);
 		
 		this.menu = new JChessMenu(new MyMenuListener());
 		
@@ -58,7 +58,7 @@ public class MainWindow extends JFrame {
 		setJMenuBar(menu);
 		
 		pack();
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 	}
 	
@@ -72,11 +72,12 @@ public class MainWindow extends JFrame {
 		
 		@Override
 		public void exit() {
-			System.exit(0);
+			dispose();
 		}
 	}
 	
 	public static void main(String[] args) {
+		// TODO : changer tous les 'historique' par 'historic'
 		
 		Runnable run = new Runnable() {
 			@Override

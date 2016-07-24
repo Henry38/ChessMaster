@@ -44,13 +44,11 @@ public class Plateau extends ChessModel {
 			}
 		}
 		
-		this.joueur = Color.White;
-		
 		this.pieceWhite = new ArrayList<Piece>(0);
 		this.pieceBlack = new ArrayList<Piece>(0);
 		this.historic = new LinkedList<Cell>();
 		
-		this.initialState = "";
+		this.joueur = null;
 	}
 	
 	@Override
@@ -74,6 +72,7 @@ public class Plateau extends ChessModel {
 	
 	public void newGame(String fen) {
 		super.newGame(fen);
+		// TODO : verifier que le format fen est valide
 		
 		String[] section = fen.split(" ");
 		pieceWhite.clear();

@@ -15,6 +15,7 @@ public class ChessTreeModel implements TreeModel {
 	
 	/** Constructeur */
 	public ChessTreeModel(ChessModel model) {
+		super();
 		this.racine = new Node(null, model);
 		this.listenerList = new EventListenerList();
 	}
@@ -101,11 +102,15 @@ public class ChessTreeModel implements TreeModel {
 	}
 	
 	@Override
-	public void valueForPathChanged(TreePath arg0, Object arg1) {
-		// pas implemente
+	public void valueForPathChanged(TreePath arg0, Object arg1) { }
+	
+	
+	
+	/** Met a jour le modele du noeud obj*/
+	public void setModel(Object obj, ChessModel model) {
+		Node node = (Node) obj;
+		node.setModel(model);
 	}
-	
-	
 	
 	/** Ajoute un fils au noeud obj de l'arbre */
 	public void add(Object obj, ChessModel model) {
@@ -115,7 +120,7 @@ public class ChessTreeModel implements TreeModel {
 		fireNodeInserted(child, node.getChildCount()-1);
 	}
 	
-	/** Retire le fils n°index du noeud obj */
+	/** Retire le fils numero index du noeud obj */
 	public void remove(Object obj, int index) {
 		Node node = (Node) obj;
 		Node child = node.getChild(index);
@@ -182,7 +187,7 @@ public class ChessTreeModel implements TreeModel {
 			return parent;
 		}
 		
-		/** Retourne le noeud enfant n°index */
+		/** Retourne le noeud enfant numero index */
 		protected Node getChild(int index) {
 			return fils.get(index);
 		}
@@ -207,7 +212,7 @@ public class ChessTreeModel implements TreeModel {
 			fils.add(node);
 		}
 		
-		/** Retire le fils n°index */
+		/** Retire le fils numero index */
 		protected void remove(int index) {
 			Node child = fils.get(index);
 			int n = child.getChildCount()-1;
@@ -218,15 +223,6 @@ public class ChessTreeModel implements TreeModel {
 			child.setModel(null);
 			child.fils.clear();
 			fils.remove(index);
-		}
-		
-		/** Enleve tous les fils du noeud */
-		protected void clear() {
-			int n = getChildCount()-1;
-			while (n >= 0) {
-				remove(n);
-				n--;
-			}
 		}
 		
 		@Override

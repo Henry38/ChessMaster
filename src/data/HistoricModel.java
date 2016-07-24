@@ -33,7 +33,7 @@ public class HistoricModel {
 	
 	/** Retourne vrai si l'index de l'historique est sur le dernier element */
 	public boolean isIndexOnLast() {
-		return (getIndex() == getSize()-1);
+		return (getSize() >= 0 && getIndex() == getSize()-1);
 	}
 	
 	/** Recule l'index de 1 */

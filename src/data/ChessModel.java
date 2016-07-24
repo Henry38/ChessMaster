@@ -226,7 +226,7 @@ public abstract class ChessModel {
 	/** Annule le dernier coup joue et change de joueur */
 	public abstract void getBack();
 	
-	/** Place le plateau sur le coup n°indexCoup */
+	/** Place le plateau sur le coup numero indexCoup */
 	public void goTo(int indexCoup) {
 		Coup coup = null;
 		// Retour arriere jusqu'au indexCoup
