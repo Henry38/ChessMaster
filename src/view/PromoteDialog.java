@@ -98,12 +98,10 @@ public class PromoteDialog extends JDialog {
 		private boolean press = false;
 		private boolean enter = false;
 		
-		@Override
 		public void mouseClicked(MouseEvent e) {
 			
 		}
 		
-		@Override
 		public void mouseEntered(MouseEvent e) {
 			if (press) {
 				enter = true;
@@ -119,7 +117,6 @@ public class PromoteDialog extends JDialog {
 			}
 		}
 		
-		@Override
 		public void mouseExited(MouseEvent e) {
 			if (press) {
 				enter = false;
@@ -135,7 +132,6 @@ public class PromoteDialog extends JDialog {
 			}
 		}
 		
-		@Override
 		public void mousePressed(MouseEvent e) {
 			press = true;
 			enter = true;
@@ -150,7 +146,6 @@ public class PromoteDialog extends JDialog {
 			}
 		}
 		
-		@Override
 		public void mouseReleased(MouseEvent e) {
 			press = false;
 			if (enter) {

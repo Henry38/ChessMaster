@@ -88,6 +88,7 @@ public final class JChessHistoric extends JPanel {
 		forward.setPreferredSize(new Dimension(48, 24));
 		forward.addActionListener(getHandler());
 		toolBar.add(forward);
+		
 	}
 	
 	/** Retourne le modele */
@@ -172,7 +173,6 @@ public final class JChessHistoric extends JPanel {
 		///
 		/// ActionListener
 		///
-		@Override
 		public void actionPerformed(ActionEvent ev) {
 			if (ev.getSource() == backward) {
 				fireRemovedClicked();
@@ -185,7 +185,6 @@ public final class JChessHistoric extends JPanel {
 		///
 		/// ListSelectionListener
 		///
-		@Override
 		public void valueChanged(ListSelectionEvent ev) {
 			ListSelectionModel selection = (ListSelectionModel) ev.getSource();
 			// La valeur est en cours d'ajustement quand la selection est entrain de changer 
@@ -198,16 +197,13 @@ public final class JChessHistoric extends JPanel {
 		///
 		/// ChessListener
 		///
-		@Override
 		public void caseChanged(int line, int column) { }
 		
-		@Override
 		public void coupAdded(Coup coup) {
 			listModel.addElement(coup);
 			tableCoup.clearSelection();
 		}
 		
-		@Override
 		public void coupRemoved(Coup coup) {
 			listModel.removeElement(coup);
 			tableCoup.clearSelection();

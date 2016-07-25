@@ -20,12 +20,10 @@ public class ChessTreeModel implements TreeModel {
 		this.listenerList = new EventListenerList();
 	}
 	
-	@Override
 	public void addTreeModelListener(TreeModelListener l) {
 		listenerList.add(TreeModelListener.class, l);
 	}
 	
-	@Override
 	public void removeTreeModelListener(TreeModelListener l) {
 		listenerList.remove(TreeModelListener.class, l);
 	}
@@ -72,36 +70,30 @@ public class ChessTreeModel implements TreeModel {
 	
 	
 	
-	@Override
 	public Object getChild(Object obj, int index) {
 		Node node = (Node) obj;
 		return node.getChild(index);
 	}
 	
-	@Override
 	public int getChildCount(Object obj) {
 		Node node = (Node) obj;
 		return node.getChildCount();
 	}
 	
-	@Override
 	public int getIndexOfChild(Object obj, Object child) {
 		Node node = (Node) obj;
 		return node.getIndexOfChild(child);
 	}
 	
-	@Override
 	public Object getRoot() {
 		return racine;
 	}
 	
-	@Override
 	public boolean isLeaf(Object obj) {
 		Node node = (Node) obj;
 		return node.isLeaf();
 	}
 	
-	@Override
 	public void valueForPathChanged(TreePath arg0, Object arg1) { }
 	
 	

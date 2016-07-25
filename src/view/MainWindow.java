@@ -3,7 +3,6 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -33,7 +32,7 @@ public class MainWindow extends JFrame {
 		this.chessHistorique = new JChessHistoric(model);
 		this.chessTree = new JChessTree(model);
 		this.controler = new Controler(chess, chessHistorique, chessTree);
-		//this.controler.newGame(GameType.joueur_contre_ordinateur);
+		this.controler.newGame(GameType.joueur_contre_ordinateur);
 		
 		this.menu = new JChessMenu(new MyMenuListener());
 		
@@ -65,12 +64,10 @@ public class MainWindow extends JFrame {
 	/** Listener prive sur le Menu */
 	private class MyMenuListener implements MenuListener {
 		
-		@Override
 		public void newGame(GameType gameType) {
 			controler.newGame(gameType);
 		}
 		
-		@Override
 		public void exit() {
 			dispose();
 		}
@@ -80,7 +77,6 @@ public class MainWindow extends JFrame {
 		// TODO : changer tous les 'historique' par 'historic'
 		
 		Runnable run = new Runnable() {
-			@Override
 			public void run() {
 				MainWindow fen = new MainWindow();
 				fen.setVisible(true);

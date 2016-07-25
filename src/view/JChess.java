@@ -158,14 +158,12 @@ public final class JChess extends JComponent {
 		///
 		/// ChessListener
 		///
-		@Override
 		public void caseChanged(int line, int column) {
 			String iconString = model.getCase(line, column).toIconString();
 			ImageIcon icon = new ImageIcon("ressource/Pieces1/" + iconString + ".jpg");
 			labels[line][column].setIcon(icon);
 		}
 		
-		@Override
 		public void coupAdded(Coup coup) {
 			for (Case c : coup.getCases()) {
 				int line = c.line;
@@ -176,7 +174,6 @@ public final class JChess extends JComponent {
 			}
 		}
 		
-		@Override
 		public void coupRemoved(Coup coup) {
 			for (Case c : coup.getCases()) {
 				int line = c.line;

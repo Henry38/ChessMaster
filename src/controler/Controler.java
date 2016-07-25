@@ -201,11 +201,10 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	}
 	
 	
-	
+	// TODO : corriger les bugs lies au changement de context et mise a jour des infos
 	///
 	///	Listener sur le JChess
 	///
-	@Override
 	public void caseClicked(int line, int column) {
 		// isEventDispatchThread = true
 		if (isHumanPhase() && historicModel.isIndexOnLast()) {
@@ -246,7 +245,6 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	///
 	///	Listener sur JChessHistoric
 	///
-	@Override
 	public void removedClicked() {
 		// isEventDispatch = true;
 		if ((isHumanPhase() || endGame) && historicModel.isIndexOnLast() && historicModel.getSize() > 0) {
@@ -276,7 +274,6 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 		}
 	}
 	
-	@Override
 	public void forkClicked() {
 		// isEventDispatch = true;
 		if (isHumanPhase() || endGame) {
@@ -285,7 +282,6 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 		}
 	}
 	
-	@Override
 	public void historicClicked(int index) {
 		// isEventdispatch = true
 		if (isHumanPhase() || endGame) {
@@ -294,13 +290,15 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 				casePlayed = null;
 			}
 			model.goTo(index);
+			// TODO : mise a jour des info ?
+//			endGame = model.checkMateKing(model.getJoueur());
+//			cpuPhase = (gameType.isCpuTurn(model));
 		}
 	}
 	
 	///
 	///	Listener sur JChessTree
 	///
-	@Override
 	public void valueChanged(TreeSelectionEvent ev) {
 		if ((isHumanPhase() || endGame) && ev.isAddedPath()) {
 			TreePath treePath = ev.getPath();
@@ -313,9 +311,9 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 				}
 				// Change le model
 				placeAtNode(node);
-				synchronized (this) {
-					notify();
-				}
+//				synchronized (this) {
+//					notify();
+//				}
 			}
 		}
 	}

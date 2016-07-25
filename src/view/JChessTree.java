@@ -96,7 +96,6 @@ public class JChessTree extends JPanel {
 	/** Classe qui ecoute le modele */
 	private class Handler implements ActionListener, TreeSelectionListener {
 		
-		@Override
 		public void actionPerformed(ActionEvent ev) {
 			if (ev.getSource() == clear) {
 				if (tree.getSelectionModel().getSelectionCount() > 0) {
@@ -107,7 +106,6 @@ public class JChessTree extends JPanel {
 			}
 		}
 		
-		@Override
 		public void valueChanged(TreeSelectionEvent ev) {
 			fireValueChanged(ev);
 		}
