@@ -7,13 +7,26 @@ import coup.Coup;
 public class HistoricModel {
 	
 	private LinkedList<Coup> listCoup;
+	private boolean cpuTurn, endGame;
 	private int index;
 	
 	/** Constructeur */
 	public HistoricModel() {
 		super();
 		this.listCoup = new LinkedList<Coup>();
+		this.cpuTurn = false;
+		this.endGame = true;
 		this.index = -1;
+	}
+	
+	/** Retourne c'est un joueur humain qui a le trait d'apres le dernier coup joue */
+	public boolean isCpuTurn() {
+		return cpuTurn;
+	}
+	
+	/** Retourne vrai si la partie est finie d'apres le dernier coup joue sur l'historique */
+	public boolean isEndGame() {
+		return endGame;
 	}
 	
 	/** Retourne le nombre de coups dans l'historique*/
@@ -63,9 +76,21 @@ public class HistoricModel {
 		return coup;
 	}
 	
+	/** Met a jour si l'ordinateur a le trait */
+	public void setCpuTurn(boolean cpuTurn) {
+		this.cpuTurn = cpuTurn;
+	}
+	
+	/** Met a jour la fin de la partie */
+	public void setEndGame(boolean endGame) {
+		this.endGame = endGame;
+	}
+	
 	/** Nettoie l'historique */
 	public void clear() {
 		listCoup.clear();
+		cpuTurn = false;
+		endGame = true;
 		index = -1;
 	}
 }

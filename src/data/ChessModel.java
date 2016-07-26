@@ -162,6 +162,9 @@ public abstract class ChessModel {
 	/** Retourne vrai si le roque noir cote reine est possible */
 	public abstract boolean qroque();
 	
+	/** Retourne vrai si la partie est finie */
+	//public abstract boolean isEndGame();
+	
 	/** Retourne vrai si la position du plateau est valide */
 	public boolean isPositionValid() {
 		// Controle des rois blancs et noirs

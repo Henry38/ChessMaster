@@ -32,7 +32,7 @@ public class MainWindow extends JFrame {
 		this.chessHistorique = new JChessHistoric(model);
 		this.chessTree = new JChessTree(model);
 		this.controler = new Controler(chess, chessHistorique, chessTree);
-		this.controler.newGame(GameType.joueur_contre_ordinateur);
+		//this.controler.newGame(GameType.joueur_contre_ordinateur);
 		
 		this.menu = new JChessMenu(new MyMenuListener());
 		

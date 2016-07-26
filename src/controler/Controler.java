@@ -16,7 +16,6 @@ import data.ChessTreeModel;
 import data.ChessTreeModel.Node;
 import data.GameType;
 import data.HistoricModel;
-import data.Plateau;
 
 public class Controler extends Thread implements ChessListener, ChessHistoricListener, TreeSelectionListener {
 	
@@ -30,7 +29,6 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	private Node currentNode;
 	
 	private Case casePlayed;
-	private boolean cpuPhase, endGame;
 	private GameType gameType;
 	private Coup coup;
 	
@@ -42,14 +40,12 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 		this.chessHistoric = chessHistoric;
 		this.soundboard = new SoundBoard();
 		
-		this.model = null;
-		this.historicModel = null;
+		this.model = chess.getModel();
+		this.historicModel = chessHistoric.getModel().getHistoricModel();
 		this.treeModel = chessTree.getTreeModel();
 		this.currentNode = (Node) treeModel.getRoot();
 		
 		this.casePlayed = null;
-		this.cpuPhase = false;
-		this.endGame = true;
 		this.gameType = null;
 		this.coup = null;
 		
@@ -80,12 +76,11 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 		
 		Node root = (Node) treeModel.getRoot();
 		treeModel.clear(root);
-		if (root.getModel() == null) {
-			ChessModel model = new Plateau();
-			treeModel.setModel(root, model);
-		}
 		root.getModel().newGame(fen);
-		placeAtNode(root);
+		placeAtNode(currentNode);
+		
+		historicModel.setCpuTurn(gameType.isCpuTurn(model));
+		historicModel.setEndGame(model.checkMateKing(model.getJoueur()) || model.isGameTie());
 		
 		notify();
 	}
@@ -97,16 +92,13 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 		this.historicModel = model.getHistoricModel();
 		chess.setModel(model);
 		chessHistoric.setModel(model);
-		// Remise a jour des informations
-		endGame = model.checkMateKing(model.getJoueur());
-		cpuPhase = (gameType.isCpuTurn(model));
 	}
 	
 	
 	
 	/** Retourne vrai si c'est au tour d'un joueur humain de jouer */
 	private boolean isHumanPhase() {
-		return (!endGame && !cpuPhase);
+		return (!historicModel.isEndGame() && !historicModel.isCpuTurn());
 	}
 	
 	/** Met a jour les cases selectionnees */
@@ -172,22 +164,22 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 			}
 			soundboard.playMate();
 			//MessageBox.ShowMessageError("Echec et Mat !", "Echec");
-			endGame = true;
+			historicModel.setEndGame(true);
 		}
 		
 		// Si la partie est declaree nulle
-		if (!endGame && model.isGameTie()) {
+		if (!historicModel.isEndGame() && model.isGameTie()) {
 			try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			soundboard.playDraw();
-			endGame = true;
+			historicModel.setEndGame(true);
 		}
 		
 		// Si le roi est en echec
-		if (!endGame && model.checkKing(model.getJoueur())) {
+		if (!historicModel.isEndGame() && model.checkKing(model.getJoueur())) {
 			try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
@@ -196,12 +188,12 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 			soundboard.playEchec();
 		}
 		
-		// Mise a jour de la variable cpuPhase
-		cpuPhase = (gameType.isCpuTurn(model));
+		// Mise a jour si l'ordinateur a le trait
+		historicModel.setCpuTurn(gameType.isCpuTurn(model));
 	}
 	
 	
-	// TODO : corriger les bugs lies au changement de context et mise a jour des infos
+	
 	///
 	///	Listener sur le JChess
 	///
@@ -247,7 +239,7 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	///
 	public void removedClicked() {
 		// isEventDispatch = true;
-		if ((isHumanPhase() || endGame) && historicModel.isIndexOnLast() && historicModel.getSize() > 0) {
+		if ((isHumanPhase() || historicModel.isEndGame()) && historicModel.isIndexOnLast() && historicModel.getSize() > 0) {
 			// Si des cases sont selectionnees
 			if (casePlayed != null) {
 				setSelectionCaseJouable(casePlayed, false);
@@ -265,8 +257,8 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 					model.setSelection(c, false);
 				}
 			}
-			endGame = false;
-			cpuPhase = (gameType.isCpuTurn(model));
+			historicModel.setCpuTurn(gameType.isCpuTurn(model));
+			historicModel.setEndGame(false);
 			// On notifie le thread si jamais la partie etait finie
 			synchronized (this) {
 				notify();
@@ -276,23 +268,24 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	
 	public void forkClicked() {
 		// isEventDispatch = true;
-		if (isHumanPhase() || endGame) {
+		if (isHumanPhase() || historicModel.isEndGame()) {
 			ChessModel clone = model.clone();
 			treeModel.add(currentNode, clone);
+			if (gameType != null) {
+				clone.getHistoricModel().setCpuTurn(gameType.isCpuTurn(model));
+				clone.getHistoricModel().setEndGame(model.checkMateKing(model.getJoueur()) || model.isGameTie());
+			}
 		}
 	}
 	
 	public void historicClicked(int index) {
 		// isEventdispatch = true
-		if (isHumanPhase() || endGame) {
+		if (isHumanPhase() || historicModel.isEndGame()) {
 			if (casePlayed != null) {
 				setSelectionCaseJouable(casePlayed, false);
 				casePlayed = null;
 			}
 			model.goTo(index);
-			// TODO : mise a jour des info ?
-//			endGame = model.checkMateKing(model.getJoueur());
-//			cpuPhase = (gameType.isCpuTurn(model));
 		}
 	}
 	
@@ -300,7 +293,7 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	///	Listener sur JChessTree
 	///
 	public void valueChanged(TreeSelectionEvent ev) {
-		if ((isHumanPhase() || endGame) && ev.isAddedPath()) {
+		if ((isHumanPhase() || historicModel.isEndGame()) && ev.isAddedPath()) {
 			TreePath treePath = ev.getPath();
 			Node node = (Node) treePath.getPathComponent(treePath.getPathCount()-1);
 			if (node != currentNode) {
@@ -311,9 +304,9 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 				}
 				// Change le model
 				placeAtNode(node);
-//				synchronized (this) {
-//					notify();
-//				}
+				synchronized (this) {
+					notify();
+				}
 			}
 		}
 	}
@@ -324,19 +317,20 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	public synchronized void run() {
 		while (true) {
 			
-			while (endGame) {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			
 			while (coup == null) {
 				try {
 					wait(100);
+					
+					while (historicModel.isEndGame()) {
+						try {
+							wait();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+					
 					// Fait jouer l'ordinateur
-					if (cpuPhase) {
+					if (historicModel.isCpuTurn()) {
 						searchCoup();
 					// Sinon attend qu'un humain joue un coup
 					} else {
@@ -348,7 +342,7 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 				}
 			}
 			
-			if (cpuPhase) {
+			if (historicModel.isCpuTurn()) {
 				jouerCoupCpu(coup);
 			} else {
 				jouerCoup(coup);

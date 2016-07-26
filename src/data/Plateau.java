@@ -54,6 +54,10 @@ public class Plateau extends ChessModel {
 	@Override
 	public ChessModel clone() {
 		ChessModel model = new Plateau();
+		if (initialState == null) {
+			return model;
+		}
+		
 		model.newGame(initialState);
 		
 		Case caseDep, caseArr;
@@ -233,6 +237,7 @@ public class Plateau extends ChessModel {
 		return (maskRoque & 1) == 1;
 	}
 	
+	// TODO : verifier toutes les possibilites de tie
 	public boolean isGameTie() {
 		// Aucune piece prise ni de pion bouge pendant 50 demi coups
 		if (nbDemiCoup >= 50) {
