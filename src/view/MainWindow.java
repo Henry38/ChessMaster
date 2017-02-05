@@ -18,20 +18,20 @@ public class MainWindow extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private JChess chess;
-	private JChessHistoric chessHistorique;
+	private JChessHistoric chessHistoric;
 	private JChessTree chessTree;
 	private Controler controler;
 	private JMenuBar menu;
 	
 	/** Constructeur */
 	public MainWindow() {
-		super("Master Chess");
+		super("ChessMaster");
 		
 		ChessModel model = new Plateau();
 		this.chess = new JChess(model);
-		this.chessHistorique = new JChessHistoric(model);
+		this.chessHistoric = new JChessHistoric(model);
 		this.chessTree = new JChessTree(model);
-		this.controler = new Controler(chess, chessHistorique, chessTree);
+		this.controler = new Controler(chess, chessHistoric, chessTree);
 		//this.controler.newGame(GameType.joueur_contre_ordinateur);
 		
 		this.menu = new JChessMenu(new MyMenuListener());
@@ -45,7 +45,7 @@ public class MainWindow extends JFrame {
 		// GameBoardInfo
 		JPanel panelInfo = new JPanel();
 		panelInfo.setLayout(new GridLayout(1, 2));
-		panelInfo.add(chessHistorique);
+		panelInfo.add(chessHistoric);
 		panelInfo.add(chessTree);
 		
 		JPanel panneau = new JPanel();
@@ -74,7 +74,6 @@ public class MainWindow extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		// TODO : changer tous les 'historique' par 'historic'
 		
 		Runnable run = new Runnable() {
 			public void run() {

@@ -50,7 +50,7 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 		this.coup = null;
 		
 		chess.addChessListener(this);
-		chessHistoric.addChessHistoriqueListener(this);
+		chessHistoric.addChessHistoricListener(this);
 		chessTree.addTreeSelectionListener(this);
 		
 		setDaemon(true);

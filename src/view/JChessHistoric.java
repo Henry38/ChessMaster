@@ -54,7 +54,7 @@ public final class JChessHistoric extends JPanel {
         toolBar.setFloatable(false);
         addButtons();
         
-		////////// Historique //////////
+		////////// Historic //////////
         listModel = new DefaultListModel<Coup>();
 		tableCoup = new JList<Coup>(listModel);
 		tableCoup.getSelectionModel().addListSelectionListener(getHandler());
@@ -126,12 +126,12 @@ public final class JChessHistoric extends JPanel {
 	
 	
 	/** Ajoute un listener selection sur le modele */
-	public void addChessHistoriqueListener(ChessHistoricListener l) {
+	public void addChessHistoricListener(ChessHistoricListener l) {
 		listenerList.add(ChessHistoricListener.class, l);
 	}
 	
 	/** Retire un listener selection sur le modele */
-	public void removeChessHistoriqueSelectionListener(ChessHistoricListener l) {
+	public void removeChessHistoricSelectionListener(ChessHistoricListener l) {
 		listenerList.remove(ChessHistoricListener.class, l);
 	}
 	
@@ -156,7 +156,7 @@ public final class JChessHistoric extends JPanel {
 	}
 	
 	/** Notifie les listeners qui ecoute la vue */
-	private void fireHistoriqueClicked(int index) {
+	private void fireHistoricClicked(int index) {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i++) {
 			if (listeners[i] instanceof ChessHistoricListener) {
@@ -167,7 +167,7 @@ public final class JChessHistoric extends JPanel {
 	
 	
 	
-	/** Classe qui ecoute le modele, les click sur les boutons et sur l'historique */
+	/** Classe qui ecoute le modele, les click sur les boutons et sur l'Historic */
 	private class Handler implements ActionListener, ListSelectionListener, ChessModelListener {
 		
 		///
@@ -190,7 +190,7 @@ public final class JChessHistoric extends JPanel {
 			// La valeur est en cours d'ajustement quand la selection est entrain de changer 
 			if (!selection.getValueIsAdjusting() && !selection.isSelectionEmpty()) {
 				int index = selection.getLeadSelectionIndex();
-				fireHistoriqueClicked(index);
+				fireHistoricClicked(index);
 			}
 		}
 		

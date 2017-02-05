@@ -29,7 +29,7 @@ public class HistoricModel {
 		return endGame;
 	}
 	
-	/** Retourne le nombre de coups dans l'historique*/
+	/** Retourne le nombre de coups dans l'historique */
 	public int getSize() {
 		return listCoup.size();
 	}
