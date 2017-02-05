@@ -4,7 +4,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import artificial_intelligence.IA_AlphaBeta;
+import ai.AlphaBeta;
 import sound.SoundBoard;
 import view.JChess;
 import view.JChessHistoric;
@@ -116,7 +116,7 @@ public class Controler extends Thread implements ChessListener, ChessHistoricLis
 	/** Cherche le meilleur coup pour l'ordinateur */
 	private synchronized void searchCoup() {
 		// Calcul du meilleur coup
-		IA_AlphaBeta t = new IA_AlphaBeta(model, 2);
+		AlphaBeta t = new AlphaBeta(model, 2);
 		t.run();	// Ne lance pas de nouveau thread !
 		coup = t.getCoup();
 	}

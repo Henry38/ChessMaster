@@ -1,4 +1,4 @@
-package artificial_intelligence;
+package ai;
 
 import java.util.ArrayList;
 
@@ -7,14 +7,14 @@ import piece.Piece;
 import data.Case;
 import data.ChessModel;
 
-public class IA_AlphaBeta extends Thread {
+public class AlphaBeta extends Thread {
 	
 	private ChessModel model;
 	private int level;
 	public Coup coup;
 	
 	/** Constructeur */
-	public IA_AlphaBeta(ChessModel model, int level) {
+	public AlphaBeta(ChessModel model, int level) {
 		this.model = model;
 		this.level = level;
 	}
