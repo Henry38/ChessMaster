@@ -13,7 +13,7 @@ public class SoundBoard {
 	public SoundBoard() {
 		this.player = null;
 		this.stream = null;
-		this.path = "./ressource/sons/";
+		this.path = "./ressource/sound/";
 	}
 	
 	public void playBmove() {

@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Hashtable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -25,14 +28,35 @@ public final class JChess extends JComponent {
 	private Handler handler;
 	private JLabel[][] labels;
 	
-	// TODO : proposer differents modeles de piece
-	// option dans la GUI = changement de folder
+	private String ressourceFolder;
+	private Hashtable<String, ImageIcon> hashIcon;
 	
 	/** Constructeur */
 	public JChess(ChessModel model) {
 		super();
 		this.model = null;
 		this.handler = new Handler();
+		this.ressourceFolder = "standard";
+		
+		this.hashIcon = new Hashtable<String, ImageIcon>();
+		
+		FilenameFilter filter = new FilenameFilter() {
+			@Override
+			public boolean accept(File file, String filename) {
+				return filename.toLowerCase().endsWith(".jpg");
+			}
+		};
+		
+		File root = new File("ressource/ui/");
+		for (File file : root.listFiles()) {
+			if (file.isDirectory()) {
+				for (File img : file.listFiles(filter)) {
+					String key = img.getPath();
+					ImageIcon value = new ImageIcon(key);
+					hashIcon.put(key, value);
+				}
+			}
+		}
 		
 		labels = new JLabel[8][];
 		for (int line = 0; line < 8; line++) {
@@ -44,7 +68,7 @@ public final class JChess extends JComponent {
 				add(label);
 			}
 		}
-//		this.grid = new JLabel(new ImageIcon("ressource/grid.png"));
+//		this.grid = new JLabel(new ImageIcon("ressource/ui/grid.png"));
 //		grid.setBounds(0, 0, 433, 433);
 //		add(grid);
 		
@@ -65,8 +89,6 @@ public final class JChess extends JComponent {
 	
 	/** Met a jour le modele */
 	public void setModel(ChessModel newModel) {
-		// TODO : les labels consomment trop de ressources
-		// implementer une solution moins gourmande
 		ChessModel oldModel = getModel();
 		
 		if (oldModel != null) {
@@ -84,14 +106,18 @@ public final class JChess extends JComponent {
 			newModel.addChessListener(getHandler());
 			for (int line = 0; line < 8; line++) {
 				for (int column = 0; column < 8; column++) {
-					String iconString = newModel.getCase(line, column).toIconString();
-					ImageIcon icon = new ImageIcon("ressource/Pieces1/" + iconString + ".jpg");
-					labels[line][column].setIcon(icon);
+					refreshIconCase(line, column);
 				}
 			}
 		}
 		
 		firePropertyChange(MODEL_CHANGED_PROPERTY, oldModel, model);
+	}
+	
+	private void refreshIconCase(int line, int column) {
+		String iconString = getModel().getCase(line, column).toIconString();
+		String key = "ressource/ui/" + ressourceFolder + "/" + iconString + ".jpg";
+		labels[line][column].setIcon(hashIcon.get(key));
 	}
 	
 	// TODO : implementer une option reverse dans la GUI
@@ -159,18 +185,14 @@ public final class JChess extends JComponent {
 		/// ChessListener
 		///
 		public void caseChanged(int line, int column) {
-			String iconString = model.getCase(line, column).toIconString();
-			ImageIcon icon = new ImageIcon("ressource/Pieces1/" + iconString + ".jpg");
-			labels[line][column].setIcon(icon);
+			refreshIconCase(line, column);
 		}
 		
 		public void coupAdded(Coup coup) {
 			for (Case c : coup.getCases()) {
 				int line = c.line;
 				int column = c.column;
-				String iconString = model.getCase(line, column).toIconString();
-				ImageIcon icon = new ImageIcon("ressource/Pieces1/" + iconString + ".jpg");
-				labels[line][column].setIcon(icon);
+				refreshIconCase(line, column);
 			}
 		}
 		
@@ -178,9 +200,7 @@ public final class JChess extends JComponent {
 			for (Case c : coup.getCases()) {
 				int line = c.line;
 				int column = c.column;
-				String iconString = model.getCase(line, column).toIconString();
-				ImageIcon icon = new ImageIcon("ressource/Pieces1/" + iconString + ".jpg");
-				labels[line][column].setIcon(icon);
+				refreshIconCase(line, column);
 			}
 		}
 	}
